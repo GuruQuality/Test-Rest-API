@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -87,13 +88,17 @@ public class RestTest {
     //2. get /student/{id} возвращает код 404, если студента с данным ID в базе нет.
     @Test
     public void getNotExistStudent() {
-        RestAssured.given()
+        String response = RestAssured.given()
                 .baseUri("http://localhost:8080/student/" + NOT_EXIST_STUDENT_ID)
-                .header("content-type", "application\\json")
+                //.header("content-type", "application\\json")
                 .when()
                 .get()
                 .then()
-                .statusCode(404);
+                .statusCode(404)
+                .body(Matchers.describedAs("Получили студента",Matchers.isEmptyString()))//пустой ли результат?
+                .extract()
+                .body().asString();
+        System.out.println(response);
     }
 
     @Test

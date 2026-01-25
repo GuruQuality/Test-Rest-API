@@ -1,2 +1,4 @@
 start-server:
 	java -jar web_service_for_testing/RestApp.jar
+start-broken-server:
+	java -jar web_service_for_testing/RestAppBroken.jar
