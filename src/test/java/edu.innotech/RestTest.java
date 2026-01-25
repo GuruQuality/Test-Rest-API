@@ -86,8 +86,26 @@ public class RestTest {
     }
 
     //2. get /student/{id} возвращает код 404, если студента с данным ID в базе нет.
+    @DisplayName("Проверка работоспособности GET student/{id}")
     @Test
     public void getNotExistStudent() {
+        String response = RestAssured.given()
+                .baseUri("http://localhost:8080/student/" + NOT_EXIST_STUDENT_ID)
+                //.header("content-type", "application\\json")
+                .when()
+                .get()
+                .then()
+                .statusCode(404)
+                .body(Matchers.describedAs("Получили студента",Matchers.isEmptyString()))//пустой ли результат?
+                .extract()
+                .body().asString();
+        System.out.println(response);
+    }
+
+    @DisplayName("Проверка работоспособности GET student/{id} при полном отсутствии данных в БД")
+    @Test
+    public void getNotExisStudentOnEmptyBD() {
+        clearAll();
         String response = RestAssured.given()
                 .baseUri("http://localhost:8080/student/" + NOT_EXIST_STUDENT_ID)
                 //.header("content-type", "application\\json")
@@ -254,6 +272,7 @@ public class RestTest {
     }
 
     //11. get /topStudent код 200 и один студент, если у него максимальная средняя оценка, либо же среди всех студентов с максимальной средней у него их больше всего.
+    @DisplayName("Проверка корректности отбора лучшего студента")
     @Test
     public void getOneStudentAsBest() {
         final int BEST_OF_THE_BEST_STUDENT_ID = 10;
