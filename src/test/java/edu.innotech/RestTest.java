@@ -157,6 +157,17 @@ public class RestTest {
                 .post("/student/")
                 .then()
                 .statusCode(201);
+
+        RestAssured.given()
+                        .baseUri("http://localhost:8080")
+                        .contentType(ContentType.JSON)
+                        .when()
+                        .get("/student/" + EXIST_STUDENT_ID)
+                        .then()
+                        .statusCode(200)
+                        .contentType(ContentType.JSON)
+                        .body("name", Matchers.equalTo("Update Padre"));
+
         System.out.println("UpdatedStudent: " + updatedStudent);
     }
 
